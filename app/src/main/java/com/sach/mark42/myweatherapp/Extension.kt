@@ -13,3 +13,11 @@ fun String.dateToDay() : String {
     val dayFormat = SimpleDateFormat("EEEE")
     return dayFormat.format(date)
 }
+
+fun String.toDate() : Date {
+    val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    val forcastDate = format.parse(this) ?: Date()
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+    val date2 = dateFormat.format(forcastDate)
+    return dateFormat.parse(date2) ?: Date()
+}

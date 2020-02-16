@@ -10,7 +10,6 @@ class WeatherRepo {
 
     suspend fun getWeather() : WeatherInfo? {
         val url = "https://api.openweathermap.org/data/2.5/weather?q=Bengaluru&APPID=9b8cb8c7f11c077f8c4e217974d9ee40"
-        val url2 = "https://samples.openweathermap.org/data/2.5/weather?q=Bengaluru&appid=b6907d289e10d714a6e88b30761fae22"
         var weatherInfo : WeatherInfo? = null
         val okHttpClient = OkHttpClient()
         val request = Request.Builder()
@@ -30,7 +29,6 @@ class WeatherRepo {
     }
 
     suspend fun getForecast() : ForecastInfo? {
-        val url2 = "https://samples.openweathermap.org/data/2.5/forecast?q=Bengaluru&appid=b6907d289e10d714a6e88b30761fae22"
         val url ="https://api.openweathermap.org/data/2.5/forecast?q=Bengaluru&APPID=9b8cb8c7f11c077f8c4e217974d9ee40"
         var forecastInfo : ForecastInfo? = null
         val okHttpClient = OkHttpClient()

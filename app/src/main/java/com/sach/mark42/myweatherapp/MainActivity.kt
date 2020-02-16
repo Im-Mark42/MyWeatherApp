@@ -108,7 +108,7 @@ class WeatherListingAdapter(private val context: AppCompatActivity, var forecast
 
         val item = forecastInfo.forecast[position]
         dayView.text = item.dateText.dateToDay()
-        temperatureView.text = item.main.temp.kelvinToCelsius().toString()
+        temperatureView.text = item.main.temp.kelvinToCelsius().toString() + " C"
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {

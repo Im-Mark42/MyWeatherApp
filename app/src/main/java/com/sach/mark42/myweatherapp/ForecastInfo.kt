@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class ForecastInfo(
     @SerializedName("list")
-    var forecast: List<WeatherInfo> = listOf()
+    var forecast: MutableList<WeatherInfo> = mutableListOf()
 )
