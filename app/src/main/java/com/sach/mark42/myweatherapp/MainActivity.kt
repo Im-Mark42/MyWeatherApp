@@ -30,10 +30,10 @@ class MainActivity : AppCompatActivity() {
         val errorLayout = findViewById<ConstraintLayout>(R.id.error_layout)
         val mainLayout = findViewById<ConstraintLayout>(R.id.main_layout)
 
-        val model = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
+        val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
             .get(WeatherViewModel::class.java)
-        model.getWeather()
-        model.getForecast()
+        viewModel.getWeather()
+        viewModel.getForecast()
 
         val forecastInfo: ForecastInfo = ForecastInfo()
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         val imageView = findViewById<ImageView>(R.id.imageView)
         imageView.startAnimation(rotate)
 
-        model.weatherLiveData.observe(this, Observer {
+        viewModel.weatherLiveData.observe(this, Observer {
             if (it == null) {
                 errorLayout.postDelayed({
                     loadingLayout.visibility = View.GONE
@@ -65,15 +65,15 @@ class MainActivity : AppCompatActivity() {
                 }, 1000)
             } else {
                 loadingLayout.visibility = View.GONE
-                textView2.text = it.main.temp.kelvinToCelsius().toString()
-                textView4.text = it.name
+                temperatureText.text = it.main.temp.kelvinToCelsius().toString()
+                cityText.text = it.name
                 mainLayout.visibility = View.VISIBLE
                 recyclerView.visibility = View.VISIBLE
                 imageView.clearAnimation()
             }
         })
 
-        model.forecastLiveData.observe(this, Observer {
+        viewModel.forecastLiveData.observe(this, Observer {
             if (it != null) {
                 forecastInfo.forecast = it.forecast
                 val controller =
@@ -89,8 +89,8 @@ class MainActivity : AppCompatActivity() {
             errorLayout.visibility = View.GONE
             loadingLayout.visibility = View.VISIBLE
             imageView.startAnimation(rotate)
-            model.getWeather()
-            model.getForecast()
+            viewModel.getWeather()
+            viewModel.getForecast()
         }
     }
 }
@@ -103,8 +103,8 @@ class WeatherListingAdapter(private val context: AppCompatActivity, var forecast
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val dayView = holder.itemView.findViewById<TextView>(R.id.textView3)
-        val temperatureView = holder.itemView.findViewById<TextView>(R.id.textView6)
+        val dayView = holder.itemView.findViewById<TextView>(R.id.dayView)
+        val temperatureView = holder.itemView.findViewById<TextView>(R.id.temperatureView)
 
         val item = forecastInfo.forecast[position]
         dayView.text = item.dateText.dateToDay()
