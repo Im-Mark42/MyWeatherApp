@@ -6,6 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.LinearInterpolator
+import android.view.animation.RotateAnimation
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
@@ -36,11 +41,27 @@ class MainActivity : AppCompatActivity() {
         val adapter = WeatherListingAdapter(this, forecastInfo)
         recyclerView.adapter = adapter
 
+        val rotate = RotateAnimation(
+            0f,
+            360f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+        rotate.duration = 1200
+        rotate.repeatCount = Animation.INFINITE
+        rotate.interpolator = LinearInterpolator()
+
+        val imageView = findViewById<ImageView>(R.id.imageView)
+        imageView.startAnimation(rotate)
+
         model.weatherLiveData.observe(this, Observer {
             if (it == null) {
                 errorLayout.postDelayed({
                     loadingLayout.visibility = View.GONE
                     errorLayout.visibility = View.VISIBLE
+                    imageView.clearAnimation()
                 }, 1000)
             } else {
                 loadingLayout.visibility = View.GONE
@@ -48,19 +69,26 @@ class MainActivity : AppCompatActivity() {
                 textView4.text = it.name
                 mainLayout.visibility = View.VISIBLE
                 recyclerView.visibility = View.VISIBLE
+                imageView.clearAnimation()
             }
         })
 
         model.forecastLiveData.observe(this, Observer {
             if (it != null) {
                 forecastInfo.forecast = it.forecast
+                val controller =
+                    AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation)
+
+                recyclerView.layoutAnimation = controller
                 adapter.notifyDataSetChanged()
+                recyclerView.scheduleLayoutAnimation()
             }
         })
 
         button.setOnClickListener {
             errorLayout.visibility = View.GONE
             loadingLayout.visibility = View.VISIBLE
+            imageView.startAnimation(rotate)
             model.getWeather()
             model.getForecast()
         }
