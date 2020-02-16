@@ -15,7 +15,7 @@ class ForecastInfoTest {
                 val z = i
                 var tempr = 0.0
                 var avg_counter = 0
-                for (j in z..forecastInfo.forecast.size) {
+                for (j in z until forecastInfo.forecast.size) {
                     val weatherInfo = forecastInfo.forecast[j]
                     val forecastDate = forecastInfo.forecast[j].dateText.toDate()
                     if (date.toDate() == forecastDate) {
